@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Birthday Surprise 🎂</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+body{
+    height:100vh;
+    background: linear-gradient(270deg,#ff0080,#7928ca,#2afadf,#ffb347);
+    background-size:800% 800%;
+    animation:bg 10s ease infinite;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:hidden;
+    color:white;
+}
+
+@keyframes bg{
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+
+.center{
+    text-align:center;
+}
+
+.hidden{
+    display:none;
+}
+
+/* Countdown */
+.countdown{
+    font-size:5rem;
+    font-weight:bold;
+    animation: pop 1s ease;
+}
+
+@keyframes pop{
+    0%{transform:scale(0)}
+    100%{transform:scale(1)}
+}
+
+/* Cake */
+.cake{
+    position:relative;
+    width:200px;
+    margin:auto;
+}
+
+.layer{
+    height:50px;
+    background:#ffb347;
+    border-radius:10px;
+    margin-top:5px;
+}
+
+.icing{
+    background:#fff;
+    height:15px;
+    border-radius:10px;
+}
+
+.candle{
+    width:10px;
+    height:40px;
+    background:red;
+    margin:auto;
+    position:relative;
+}
+
+.flame{
+    width:12px;
+    height:12px;
+    background:gold;
+    border-radius:50%;
+    position:absolute;
+    top:-12px;
+    left:-1px;
+    animation:flicker .6s infinite alternate;
+}
+
+@keyframes flicker{
+    from{transform:scale(1)}
+    to{transform:scale(1.2)}
+}
+
+.card{
+    background:rgba(0,0,0,.35);
+    padding:30px;
+    border-radius:20px;
+    margin-top:20px;
+    animation: pop 1.5s ease;
+}
+
+h1{
+    animation:glow 1.5s infinite alternate;
+}
+
+@keyframes glow{
+    from{text-shadow:0 0 10px #fff}
+    to{text-shadow:0 0 30px #ffeb3b}
+}
+
+button{
+    padding:15px 30px;
+    font-size:1.2rem;
+    border:none;
+    border-radius:30px;
+    background:#ff4081;
+    color:white;
+    cursor:pointer;
+    box-shadow:0 0 15px rgba(0,0,0,.3);
+}
+</style>
+</head>
+
+<body>
+
+<div class="center">
+    <button id="startBtn">🎁 Tap for Surprise</button>
+
+    <div id="countdown" class="countdown hidden"></div>
+
+    <div id="cakeSection" class="hidden">
+        <div class="cake">
+            <div class="candle">
+                <div class="flame"></div>
+            </div>
+            <div class="icing"></div>
+            <div class="layer"></div>
+            <div class="layer"></div>
+            <div class="layer"></div>
+        </div>
+
+        <div class="card">
+            <h1>🎉 Happy Birthday 🎉</h1>
+            <p>Wishing you a very happy birthday dear <b>Shraddha</b> 💖</p>
+            <p>📅 19 January 2026</p>
+        </div>
+    </div>
+</div>
+
+<!-- Background Music -->
+<audio id="music" loop>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mp3">
+</audio>
+
+<script>
+const startBtn = document.getElementById("startBtn");
+const countdownEl = document.getElementById("countdown");
+const cakeSection = document.getElementById("cakeSection");
+const music = document.getElementById("music");
+
+startBtn.onclick = () => {
+    startBtn.style.display="none";
+    music.play();
+
+    let count = 3;
+    countdownEl.classList.remove("hidden");
+    countdownEl.innerText = count;
+
+    let timer = setInterval(()=>{
+        count--;
+        if(count > 0){
+            countdownEl.innerText = count;
+        } else {
+            clearInterval(timer);
+            countdownEl.innerText = "🎉 SURPRISE 🎉";
+            setTimeout(()=>{
+                countdownEl.classList.add("hidden");
+                cakeSection.classList.remove("hidden");
+            },1000);
+        }
+    },1000);
+};
+</script>
+
+</body>
+</html>
