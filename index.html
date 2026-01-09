@@ -1,4 +1,4 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -86,4 +86,147 @@ canvas{
     height:14px;
     background:radial-gradient(circle, #ffd27d, #ff8c00);
     border-radius:50% 50% 50% 50%;
-    position:absolute
+    position:absolute;
+    top:-14px;
+    left:-1px;
+    animation:flicker .5s infinite alternate;
+}
+
+@keyframes flicker{
+    from{transform:scale(1)}
+    to{transform:scale(1.2)}
+}
+
+.card{
+    background:rgba(0,0,0,.45);
+    padding:30px 40px;
+    border-radius:18px;
+    margin-top:20px;
+}
+
+h1{
+    font-size:2.8rem;
+    margin-bottom:10px;
+    letter-spacing:1px;
+}
+
+p{
+    font-size:1.3rem;
+    margin-top:6px;
+    opacity:0.95;
+}
+
+button{
+    padding:14px 36px;
+    font-size:1.1rem;
+    border:none;
+    border-radius:40px;
+    background:#caa24d;
+    color:#000;
+    cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="fireworks"></canvas>
+
+<div class="center">
+    <button id="startBtn">Tap to Begin</button>
+
+    <div id="countdown" class="countdown hidden"></div>
+
+    <div id="content" class="hidden">
+        <div class="cake">
+            <div class="candle">
+                <div class="flame"></div>
+            </div>
+            <div class="icing"></div>
+            <div class="layer"></div>
+            <div class="layer"></div>
+            <div class="layer"></div>
+        </div>
+
+        <div class="card">
+            <h1>Happy Birthday</h1>
+            <p>Wishing you a very happy birthday dear Shraddha</p>
+            <p>19 January 2026</p>
+        </div>
+    </div>
+</div>
+
+<audio id="music" loop>
+    <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_58d5b8bb6c.mp3" type="audio/mp3">
+</audio>
+
+<script>
+/* Countdown + Start */
+const btn = document.getElementById("startBtn");
+const cd = document.getElementById("countdown");
+const content = document.getElementById("content");
+const music = document.getElementById("music");
+
+btn.onclick = ()=>{
+    btn.style.display="none";
+    music.play();
+
+    let n = 3;
+    cd.classList.remove("hidden");
+    cd.innerText = n;
+
+    let t = setInterval(()=>{
+        n--;
+        if(n>0){
+            cd.innerText = n;
+        }else{
+            clearInterval(t);
+            cd.classList.add("hidden");
+            content.classList.remove("hidden");
+            launchFireworks();
+        }
+    },1000);
+};
+
+/* Fireworks */
+const canvas = document.getElementById("fireworks");
+const ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+function random(min,max){return Math.random()*(max-min)+min;}
+
+function launchFireworks(){
+    setInterval(()=>{
+        let x = random(100,canvas.width-100);
+        let y = random(100,canvas.height/2);
+        for(let i=0;i<60;i++){
+            particles.push({
+                x,y,
+                vx: random(-4,4),
+                vy: random(-4,4),
+                life:60
+            });
+        }
+    },800);
+}
+
+let particles = [];
+
+function animate(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    particles.forEach((p,i)=>{
+        p.x += p.vx;
+        p.y += p.vy;
+        p.life--;
+        ctx.fillStyle = "rgba(255,215,150,"+(p.life/60)+")";
+        ctx.fillRect(p.x,p.y,3,3);
+        if(p.life<=0) particles.splice(i,1);
+    });
+    requestAnimationFrame(animate);
+}
+animate();
+</script>
+
+</body>
+</html>
