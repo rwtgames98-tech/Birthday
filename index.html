@@ -3,193 +3,152 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Happy Birthday Shraddha</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&display=swap" rel="stylesheet">
+<title>Happy Birthday</title>
 
 <style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family: 'Playfair Display', serif;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family: "Playfair Display", serif;}
 
 body{
   height:100vh;
-  background: radial-gradient(circle at top, #2b1055, #0f0c29);
+  background: linear-gradient(180deg,#0b1026,#000);
+  color:#fff;
   display:flex;
   justify-content:center;
   align-items:center;
   overflow:hidden;
-  color:#fff;
-}
-
-canvas{
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  z-index:-1;
+  text-align:center;
 }
 
 .container{
-  text-align:center;
-  padding:30px;
-  max-width:420px;
+  max-width:90%;
+  animation: fade 2s ease forwards;
 }
 
 button{
-  padding:14px 42px;
-  font-size:1.1rem;
+  padding:14px 28px;
+  font-size:18px;
   border:none;
   border-radius:40px;
-  background:linear-gradient(45deg,#ff9a9e,#fad0c4);
-  color:#2b1055;
+  background:#fff;
+  color:#000;
   cursor:pointer;
 }
 
-.hidden{display:none;}
-
-.count{
-  font-size:4rem;
-  margin-bottom:20px;
-  animation:fade 1s ease;
+#count{
+  font-size:90px;
+  display:none;
+  margin:20px 0;
 }
 
-@keyframes fade{
-  from{opacity:0; transform:scale(0.6)}
-  to{opacity:1; transform:scale(1)}
-}
-
-.card{
-  background:rgba(255,255,255,0.08);
-  backdrop-filter:blur(14px);
-  border-radius:22px;
-  padding:35px 30px;
-  animation:slide 1.4s ease;
-}
-
-@keyframes slide{
-  from{opacity:0; transform:translateY(40px)}
-  to{opacity:1; transform:translateY(0)}
-}
+#content{display:none;}
 
 h1{
-  font-size:2.6rem;
-  margin-bottom:12px;
+  font-size:44px;
+  letter-spacing:2px;
 }
 
 p{
-  font-size:1.15rem;
+  font-size:18px;
+  margin-top:14px;
   line-height:1.7;
 }
 
-.emojis{
-  font-size:1.8rem;
-  margin:18px 0;
-  animation:float 2s infinite alternate;
+.design{
+  font-size:26px;
+  margin:22px 0;
+  opacity:0.9;
 }
 
-@keyframes float{
-  from{transform:translateY(0)}
-  to{transform:translateY(-10px)}
+.firework{
+  position:absolute;
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  animation: boom 1.6s ease-out forwards;
+}
+
+@keyframes boom{
+  from{transform:scale(0);opacity:1;}
+  to{transform:scale(5);opacity:0;}
+}
+
+@keyframes fade{
+  from{opacity:0;transform:scale(.95);}
+  to{opacity:1;transform:scale(1);}
 }
 </style>
 </head>
 
 <body>
 
-<canvas id="fire"></canvas>
-
 <div class="container">
-  <button id="start">Tap to Begin</button>
 
-  <div id="count" class="count hidden"></div>
+<button id="start">Begin</button>
 
-  <div id="content" class="hidden">
-    <div class="card">
-      <div class="emojis">✨ 💖 🌙 ✨</div>
-      <h1>Happy Birthday</h1>
-      <p>
-        Wishing you a very happy birthday<br>
-        dear <b>Shraddha</b><br><br>
-        May your life always shine with<br>
-        love, peace and beautiful moments
-      </p>
-      <p style="margin-top:16px;">19 January 2026</p>
-      <div class="emojis">🌸 💫 💕 ✨</div>
-    </div>
-  </div>
+<div id="count">3</div>
+
+<div id="content">
+  <div class="design">✨ 🌸 💫 💖 🌙 ✨</div>
+
+  <h1>Happy Birthday</h1>
+
+  <p>
+    Wishing you a very happy birthday<br>
+    dear <b id="name">Shraddha</b><br><br>
+    19 January 2026
+  </p>
+
+  <div class="design">🌷 💞 ⭐ 🌙 ✨</div>
 </div>
 
-<audio id="music" loop>
-  <source src="https://cdn.pixabay.com/download/audio/2022/03/10/audio_88e2b8e9ad.mp3" type="audio/mp3">
+</div>
+
+<audio id="music" preload="auto">
+  <source src="https://cdn.pixabay.com/download/audio/2023/03/14/audio_3c7f9c0e52.mp3">
 </audio>
 
 <script>
-const btn = document.getElementById("start");
-const count = document.getElementById("count");
-const content = document.getElementById("content");
-const music = document.getElementById("music");
+const btn=document.getElementById("start");
+const count=document.getElementById("count");
+const content=document.getElementById("content");
+const music=document.getElementById("music");
 
-btn.onclick = ()=>{
+// name from URL
+const params=new URLSearchParams(window.location.search);
+const n=params.get("name");
+if(n) document.getElementById("name").innerText=n;
+
+btn.onclick=async()=>{
   btn.style.display="none";
-  music.play();
+  try{await music.play();}catch(e){}
 
-  let n=3;
-  count.classList.remove("hidden");
-  count.innerText=n;
+  let i=3;
+  count.style.display="block";
+  count.innerText=i;
 
-  let t=setInterval(()=>{
-    n--;
-    if(n>0){
-      count.innerText=n;
-    }else{
+  const t=setInterval(()=>{
+    i--;
+    if(i>0){count.innerText=i;}
+    else{
       clearInterval(t);
-      count.classList.add("hidden");
-      content.classList.remove("hidden");
-      fireworks();
+      count.style.display="none";
+      content.style.display="block";
+      setInterval(fireworks,1200);
     }
   },1000);
 };
 
-// Fireworks
-const canvas=document.getElementById("fire");
-const ctx=canvas.getContext("2d");
-canvas.width=innerWidth;
-canvas.height=innerHeight;
-let parts=[];
-
 function fireworks(){
-  setInterval(()=>{
-    let x=Math.random()*canvas.width;
-    let y=Math.random()*canvas.height/2;
-    for(let i=0;i<50;i++){
-      parts.push({
-        x,y,
-        vx:(Math.random()-0.5)*4,
-        vy:(Math.random()-0.5)*4,
-        life:50
-      });
-    }
-  },1200);
+  for(let i=0;i<30;i++){
+    const f=document.createElement("div");
+    f.className="firework";
+    f.style.left=Math.random()*100+"vw";
+    f.style.top=Math.random()*100+"vh";
+    f.style.background=`hsl(${Math.random()*360},100%,65%)`;
+    document.body.appendChild(f);
+    setTimeout(()=>f.remove(),1600);
+  }
 }
-
-function anim(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  parts.forEach((p,i)=>{
-    p.x+=p.vx;
-    p.y+=p.vy;
-    p.life--;
-    ctx.fillStyle=`rgba(255,200,255,${p.life/50})`;
-    ctx.fillRect(p.x,p.y,2.5,2.5);
-    if(p.life<=0) parts.splice(i,1);
-  });
-  requestAnimationFrame(anim);
-}
-anim();
 </script>
 
 </body>
